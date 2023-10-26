@@ -27,6 +27,9 @@ library
   include-dirs:       include
   extra-libraries:    icuuc
 
+  if !(arch(x86_64) || arch(aarch64))
+    buildable: False
+
   if os(windows)
     extra-libraries:
       icuin
@@ -48,26 +51,6 @@ library
 
   -- hs-source-dirs:      
   default-language:   GHC2021
-
-executable translit
-  default-language: GHC2021
-  hs-source-dirs:   app
-  ghc-options:      -Wall
-  main-is:          Main.hs
-
-  if !(arch(x86_64) || arch(aarch64))
-    buildable: False
-
-  build-depends:
-      base
-    , lens
-    , lens-family
-    , pipes
-    , pipes-group
-    , pipes-text
-    , text
-    , text-icu
-    , text-icu-translit
 
 test-suite text-icu-translit-test
   type:               exitcode-stdio-1.0
