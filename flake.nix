@@ -8,7 +8,7 @@
   };
   outputs = inputs:
     inputs.parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
+      systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
       imports = [
         inputs.haskell-flake.flakeModule
         inputs.pre-commit-hooks.flakeModule
@@ -34,12 +34,6 @@
         packages.default = config.packages.ghc94-text-icu-translit;
         devShells.default = config.devShells.ghc94;
         haskellProjects = {
-          ghc92 = {
-            packages = {};
-            settings = {};
-            basePackages = pkgs.haskell.packages.ghc92;
-            devShell.mkShellArgs.shellHook = config.pre-commit.installationScript;
-          };
           ghc94 = {
             packages = {};
             settings = {};

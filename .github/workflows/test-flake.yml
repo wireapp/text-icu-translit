@@ -13,8 +13,6 @@ jobs:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
     - name: "flake check"
       run: nix flake check -Lv --allow-import-from-derivation --fallback --accept-flake-config
-    - name: GHC 9.2
-      run: nix build .#ghc92-text-icu-translit -Lv --fallback --accept-flake-config
     - name: GHC 9.4
       run: nix build .#ghc94-text-icu-translit -Lv --fallback --accept-flake-config
     - name: GHC 9.6

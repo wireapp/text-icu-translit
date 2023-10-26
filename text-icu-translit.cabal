@@ -54,6 +54,10 @@ executable translit
   hs-source-dirs:   app
   ghc-options:      -Wall
   main-is:          Main.hs
+
+  if !(arch(x86_64) || arch(aarch64))
+    buildable: False
+
   build-depends:
       base
     , lens
