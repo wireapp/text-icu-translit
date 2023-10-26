@@ -1,0 +1,21 @@
+name: "Check Flake"
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+jobs:
+  check-flake:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v22
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: "flake check"
+      run: nix flake check -Lv --allow-import-from-derivation --fallback --accept-flake-config
+    - name: GHC 9.2
+      run: nix build .#ghc92-text-icu-translit -Lv --fallback --accept-flake-config
+    - name: GHC 9.4
+      run: nix build .#ghc94-text-icu-translit -Lv --fallback --accept-flake-config
+    - name: GHC 9.6
+      run: nix build .#ghc96-text-icu-translit -Lv --fallback --accept-flake-config

@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "./"
+      component: "lib:text-icu-translit"
+
+    - path: "app/Main.hs"
+      component: "text-icu-translit:exe:translit"
+
+    - path: "test"
+      component: "text-icu-translit:test:text-icu-translit-test"
