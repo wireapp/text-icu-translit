@@ -51,7 +51,6 @@ transliterator spec = do
   BS.useAsCStringLen specStr $ \((castPtr @_ @Word16) -> ptr, (`div` 2) -> len) -> do
     q <- handleError $ openTrans ptr (fromIntegral len)
     ref <- newForeignPtr closeTrans q
-    -- touchForeignPtr ref
     return $ Transliterator ref spec
 
 transliterate :: Transliterator -> Text -> IO Text
