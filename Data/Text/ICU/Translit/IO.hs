@@ -1,7 +1,7 @@
 module Data.Text.ICU.Translit.IO
-  ( Transliterator
-  , transliterator
-  , transliterate
+  ( Transliterator,
+    transliterator,
+    transliterate,
   )
 where
 
@@ -10,35 +10,35 @@ import Data.ByteString qualified as BS
 import Data.Text (Text)
 import Data.Text.Encoding qualified as T
 import Data.Text.ICU.Translit.ICUHelper
-  ( UChar
-  , UErrorCode
-  , handleError
-  , handleFilledOverflowError
+  ( UChar,
+    UErrorCode,
+    handleError,
+    handleFilledOverflowError,
   )
 import Foreign
 
 data UTransliterator
 
 foreign import ccall "trans.h __hs_translit_open_trans"
-  openTrans
-    :: Ptr UChar -> Int -> Ptr UErrorCode -> IO (Ptr UTransliterator)
+  openTrans ::
+    Ptr UChar -> Int -> Ptr UErrorCode -> IO (Ptr UTransliterator)
 
 foreign import ccall "trans.h &__hs_translit_close_trans"
-  closeTrans
-    :: FunPtr (Ptr UTransliterator -> IO ())
+  closeTrans ::
+    FunPtr (Ptr UTransliterator -> IO ())
 
 foreign import ccall "trans.h __hs_translit_do_trans"
-  doTrans
-    :: Ptr UTransliterator
-    -> Ptr UChar
-    -> Int32
-    -> Int32
-    -> Ptr UErrorCode
-    -> IO Int32
+  doTrans ::
+    Ptr UTransliterator ->
+    Ptr UChar ->
+    Int32 ->
+    Int32 ->
+    Ptr UErrorCode ->
+    IO Int32
 
 data Transliterator = Transliterator
-  { transPtr :: ForeignPtr UTransliterator
-  , transSpec :: Text
+  { transPtr :: ForeignPtr UTransliterator,
+    transSpec :: Text
   }
 
 instance Show Transliterator where
@@ -51,7 +51,7 @@ transliterator spec = do
   BS.useAsCStringLen specStr $ \((castPtr @_ @Word16) -> ptr, (`div` 2) -> len) -> do
     q <- handleError $ openTrans ptr (fromIntegral len)
     ref <- newForeignPtr closeTrans q
-    touchForeignPtr ref
+    -- touchForeignPtr ref
     return $ Transliterator ref spec
 
 transliterate :: Transliterator -> Text -> IO Text

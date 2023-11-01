@@ -21,18 +21,18 @@ newtype IdempTr = IdempTr Text deriving (Show)
 
 instance Arbitrary IdempTr where
   arbitrary = elements transes0
-   where
-    transes0 = map IdempTr ["ru-en", "en-ru"]
+    where
+      transes0 = map IdempTr ["ru-en", "en-ru"]
 
 hexUnicode :: Text -> Text
 hexUnicode txt = T.pack $ concat [fmt c | c <- T.unpack txt]
- where
-  fmt c = printf (if ord c < 0x10000 then "U+%04X" else "U+%X") (ord c)
+  where
+    fmt c = printf (if ord c < 0x10000 then "U+%04X" else "U+%X") (ord c)
 
 prop_idemp :: (IdempTr, Text) -> Property
 prop_idemp (IdempTr t, s) = transliterate tr (transliterate tr s) === transliterate tr s
- where
-  tr = trans t
+  where
+    tr = trans t
 
 prop_toLower :: Text -> Property
 prop_toLower t = U.toLower U.Root t === transliterate (trans "Lower") t
